@@ -2,7 +2,7 @@
 
 A simple, fast, and feature-rich HTML Resume Builder App designed to help professionals create beautiful resumes effortlessly.
 
-🔗 **Visit Live App:** [Resume Builder](https://antonyrobin.github.io/resume_builder)
+🔗 **Visit Live App:** [Resume Builder](https://resume.redexoans.com)
 
 ## 📋 Table of Contents
 - [Features](#-features)
