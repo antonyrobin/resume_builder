@@ -1,72 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Builder</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <title>Resume Builder | Free Professional Resume Designer & PDF Export</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Build stunning, professional resumes in minutes with our free online Resume Builder. Choose from 5 premium templates, customize every detail, and export to PDF instantly. No sign-up required.">
+    <meta name="keywords" content="resume builder, free resume maker, professional resume, CV builder, resume templates, online resume creator, PDF resume, resume designer, job application, career tools, resume generator, curriculum vitae, modern resume, ATS-friendly resume">
+    <meta name="author" content="ResumeBuilder">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#6c63ff">
+    <link rel="canonical" href="https://antonyrobin.github.io/resume_builder/">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://antonyrobin.github.io/resume_builder/">
+    <meta property="og:title" content="Resume Builder | Free Professional Resume Designer & PDF Export">
+    <meta property="og:description" content="Create polished, job-winning resumes with 5 premium templates. Customize, preview in real-time, and export to PDF — completely free, no sign-up needed.">
+    <meta property="og:image" content="https://antonyrobin.github.io/resume_builder/favicon.png">
+    <meta property="og:site_name" content="ResumeBuilder">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://antonyrobin.github.io/resume_builder/">
+    <meta name="twitter:title" content="Resume Builder | Free Professional Resume Designer & PDF Export">
+    <meta name="twitter:description" content="Create polished, job-winning resumes with 5 premium templates. Customize, preview in real-time, and export to PDF — completely free.">
+    <meta name="twitter:image" content="https://antonyrobin.github.io/resume_builder/favicon.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ResumeBuilder",
+        "url": "https://antonyrobin.github.io/resume_builder/",
+        "description": "Free online professional resume builder with 5 premium templates, real-time preview, and instant PDF export.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "5 Professional Resume Templates",
+            "Real-time Live Preview",
+            "PDF Export",
+            "JSON Import/Export",
+            "Dark & Light Theme",
+            "Profile Photo Upload",
+            "Rich Text Editor for Summary",
+            "No Sign-up Required"
+        ],
+        "screenshot": "https://antonyrobin.github.io/resume_builder/favicon.png",
+        "browserRequirements": "Requires JavaScript. Requires HTML5."
+    }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Summernote Dependencies (keep if needed, but I'll try to use a simple text area for simplicity and better control in templates, or keep summernote for full detail summary) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div id="notifier" class="notifier"></div>
-    <div class="container">
-        <div class="resizable">
-            <div class="form-section" id="form-section">
-                <h1>Resume Builder</h1>
-                <div class="actions">
-                    <button class="export" onclick="exportJSON()">Export JSON</button>
-                    <label class="upload">
-                        <input type="file" id="upload-json" accept="application/json" style="display: none;" onchange="uploadJSON(event)">
-                        Upload JSON
+    <div id="notifier">Notification message</div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i data-lucide="file-text"></i>
+                <span>ResumeBuilder</span>
+            </div>
+            <div class="header-actions">
+                <div class="theme-switch" title="Toggle Dark/Light Mode">
+                    <i data-lucide="sun" id="sun-icon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                        <span class="slider"></span>
                     </label>
-                    <button class="pdf-export" onclick="htmlToPDF()">Export PDF</button>
+                    <i data-lucide="moon" id="moon-icon"></i>
                 </div>
-                <div id="form-container">
+                <button class="btn btn-secondary" onclick="exportJSON()">
+                    <i data-lucide="download"></i> Export JSON
+                </button>
+                <label class="btn btn-secondary" style="margin-bottom: 0;">
+                    <i data-lucide="upload"></i> Upload JSON
+                    <input type="file" id="upload-json" accept="application/json" style="display: none;" onchange="uploadJSON(event)">
+                </label>
+                <button class="btn btn-primary" onclick="htmlToPDF()">
+                    <i data-lucide="file-down"></i> Export PDF
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- FORM SECTION -->
+            <aside class="form-section">
+                <div class="section-card">
+                    <h2 class="section-title">Template & Theme</h2>
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="Enter your name" oninput="updatePreview()">
+                        <label for="template-select">Choose Template</label>
+                        <select id="template-select" onchange="updatePreview()">
+                            <option value="template-classic">Classic Professional</option>
+                            <option value="template-modern">Modern Tech</option>
+                            <option value="template-creative">Creative Two-Column</option>
+                            <option value="template-minimalist">Minimalist Developer</option>
+                            <option value="template-executive">Executive Portfolio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Personal Information</h2>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Doe" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Profile Photo</label>
+                        <input type="file" id="photo" accept="image/*" onchange="uploadPhoto(event)">
+                        <button class="btn btn-danger btn-sm" onclick="removePhoto()" id="remove-photo-btn" style="margin-top: 5px; display: none;">Remove Photo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <input type="text" id="job-title" placeholder="Senior Software Engineer" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Enter your email" oninput="updatePreview()">
+                        <input type="email" id="email" placeholder="john@example.com" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="tel" id="phone" placeholder="Enter your phone number" oninput="updatePreview()">
+                        <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label for="objective">Objective</label>
-                        <textarea id="objective" rows="4" placeholder="Enter a objective" oninput="updatePreview()"></textarea>
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="New York, USA" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label for="objective">Summary</label>
-                        <textarea id="summary" rows="4" placeholder="Enter a objective" oninput="updatePreview()" style="display: none;"></textarea>
+                        <label for="linkedin">LinkedIn Profile URL</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label for="github">GitHub Profile URL</label>
+                        <input type="url" id="github" placeholder="https://github.com/johndoe" oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Professional Summary</h2>
+                    <div class="form-group">
                         <div id="summary_editor"></div>
+                        <input type="hidden" id="summary">
                     </div>
                 </div>
-            </div>
-            <div class="resizer" id="resizer"></div>
-            <div class="preview-section" id="preview-section">
-                <h1>Resume Preview</h1>
-                <div id="preview-container">
-                    <h1 id="preview-name"></h1>
-                    <p class="preview-important"><strong>Email:</strong> <span id="preview-email"></span></p>
-                    <p class="preview-important"><strong>Phone:</strong> <span id="preview-phone"></span></p>
-                    <hr>
-                    <p class="preview-head"><strong>Objective:</strong></p>
-                    <p class="preview-summary" id="preview-objective"></p>
-                    <hr>
-                    <p class="preview-head"><strong>Professional Summary:</strong></p>
-                    <p class="preview-summary" id="preview-summary"></p>
+
+                <!-- DYNAMIC SECTIONS -->
+                <div class="section-card">
+                    <h2 class="section-title">Experience</h2>
+                    <div id="experience-list"></div>
+                    <button class="btn btn-secondary" onclick="addItem('experience')">
+                        <i data-lucide="plus"></i> Add Experience
+                    </button>
                 </div>
-            </div>
-        </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Education</h2>
+                    <div id="education-list"></div>
+                    <button class="btn btn-secondary" onclick="addItem('education')">
+                        <i data-lucide="plus"></i> Add Education
+                    </button>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Skills</h2>
+                    <div class="form-group">
+                        <label for="skills">Skills (Comma separated)</label>
+                        <input type="text" id="skills" placeholder="JavaScript, React, Node.js, Python" oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Projects</h2>
+                    <div id="projects-list"></div>
+                    <button class="btn btn-secondary" onclick="addItem('projects')">
+                        <i data-lucide="plus"></i> Add Project
+                    </button>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Courses</h2>
+                    <div id="courses-list"></div>
+                    <button class="btn btn-secondary" onclick="addItem('courses')">
+                        <i data-lucide="plus"></i> Add Course
+                    </button>
+                </div>
+
+                <div class="section-card">
+                    <h2 class="section-title">Certifications</h2>
+                    <div id="certificates-list"></div>
+                    <button class="btn btn-secondary" onclick="addItem('certificates')">
+                        <i data-lucide="plus"></i> Add Certificate
+                    </button>
+                </div>
+            </aside>
+
+            <!-- PREVIEW SECTION -->
+            <section class="preview-section">
+                <div id="preview-container" class="template-classic">
+                    <!-- Preview content will be dynamically generated by JS -->
+                </div>
+            </section>
+        </main>
+
+        <footer style="text-align: center; padding: 15px 20px; font-size: 0.85rem; color: var(--text-secondary); width: 100%; border-top: 1px solid var(--border-color); margin-top: 20px;">
+            <p>&copy; 2026 ResumeBuilder. Released under the <a href="https://github.com/antonyrobin/resume_builder/blob/main/LICENSE" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">MIT License</a>. Free and Open Source.</p>
+        </footer>
     </div>
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
